@@ -38,7 +38,8 @@ export function displayAxisPosition(axis: Axis, machinePosition: boolean = false
 	}
 
 	position = position / ((store.state.settings.displayUnits === UnitOfMeasure.imperial) ? 25.4 : 1);
-	return axis.letter === AxisLetter.Z ? displayZ(position, false) : display(position, store.state.settings.decimalPlaces);
+	return displayZ(position,false);
+/**	return axis.letter === AxisLetter.Z ? displayZ(position, false) : display(position, store.state.settings.decimalPlaces); */
 }
 
 /**
