@@ -487,7 +487,7 @@ export default class PollConnector extends BaseConnector {
 					do {
 						const keyResponse = await this.request("GET", "rr_model", {
 							key,
-							flags: (next === 0) ? "d99vn" : `d99vna${next}`
+							flags: (next === 0) ? "d99vno" : `d99vnoa${next}`
 						});
 
 						next = keyResponse.next ? keyResponse.next : 0;
@@ -518,7 +518,7 @@ export default class PollConnector extends BaseConnector {
 			}
 		} else {
 			// Query live values
-			const response = await this.request("GET", "rr_model", { flags: "d99fn" });
+			const response = await this.request("GET", "rr_model", { flags: "d99fno" });
 			jobKey = response.result.job as Job;
 			status = response.result.state.status as MachineStatus;
 
@@ -954,9 +954,13 @@ export default class PollConnector extends BaseConnector {
 	 * @param filename Path of the file to download
 	 * @param type Optional type of the received data (defaults to JSON)
 	 * @param cancellationToken Optional cancellation token that may be triggered to cancel this operation
+     * @param rawPath Obtain file from DWC base path instead of virtual SD card (defaults to false)
 	 * @param onProgress Optional callback for progress reports
 	 */
-	async download(filename: string, type?: XMLHttpRequestResponseType, cancellationToken?: CancellationToken, onProgress?: OnProgressCallback): Promise<any> {
+	async download(filename: string, type?: XMLHttpRequestResponseType, cancellationToken?: CancellationToken, rawPath?: boolean, onProgress?: OnProgressCallback): Promise<any> {
+		if (rawPath) {
+			return await this.request("GET", filename, null, type, null, 0, filename, cancellationToken, onProgress);
+		}
 		return await this.request("GET", "rr_download", { name: filename }, type, null, 0, filename, cancellationToken, onProgress);
 	}
 
