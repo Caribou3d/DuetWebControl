@@ -198,7 +198,7 @@ export default {
 		numericInputs: false,
 		iconMenu: false,
 		displayUnits: UnitOfMeasure.metric,
-		decimalPlaces: 1,
+		decimalPlaces: 2,
 
 		settingsStorageLocal: false,
 		settingsSaveDelay: 500,
