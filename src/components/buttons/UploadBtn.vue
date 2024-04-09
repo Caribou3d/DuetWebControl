@@ -176,7 +176,7 @@ export default Vue.extend({
 				firmwareBoards: new Array<number>(),
 				wifiServer: false,
 				wifiServerSpiffs: false,
-				panelDue: false,
+				display: false,
 
 				codeSent: false
 			},
@@ -348,7 +348,7 @@ export default Vue.extend({
 			this.updates.firmwareBoards = [];
 			this.updates.wifiServer = false;
 			this.updates.wifiServerSpiffs = false;
-			this.updates.panelDue = false;
+			this.updates.display = false;
 
 			let skipUpload = false;
 			for (let i = 0; i < files.length; i++) {
@@ -380,26 +380,23 @@ export default Vue.extend({
 						} else if (iapFileNameSD) {
 							filename = Path.combine(store.state.machine.model.directories.firmware, iapFileNameSD);
 						} else if (!store.state.machine.model.sbc && store.state.machine.model.network.interfaces.some(iface => iface.type === NetworkInterfaceType.wifi)) {
-							if ((/DuetWiFiSocketServer(.*)\.bin/i.test(content.name) || /DuetWiFiServer(.*)\.bin/i.test(content.name))) {
+							if (store.state.machine.model.boards.some(board => board.wifiFirmwareFileName === content.name)) {
+								filename = Path.combine(store.state.machine.model.directories.firmware, content.name);
+								this.updates.wifiServer = true;
+							} else if (/DuetWiFiSocketServer(.*)\.bin/i.test(content.name) || /DuetWiFiServer(.*)\.bin/i.test(content.name)) {
 								// Deprecated; will be removed in v3.6
 								filename = Path.combine(store.state.machine.model.directories.firmware, "DuetWiFiServer.bin");
 								this.updates.wifiServer = true;
-							} else if (/DuetWebControl(.*)\.bin/i.test(content.name)) {
-								// Deprecated; will be removed in v3.6
-								filename = Path.combine(store.state.machine.model.directories.firmware, "DuetWebControl.bin");
-								this.updates.wifiServerSpiffs = true;
 							} else if (content.name.endsWith(".bin") || content.name.endsWith(".uf2")) {
 								filename = Path.combine(store.state.machine.model.directories.firmware, content.name);
-								if (store.state.machine.model.boards.some(board => board.wifiFirmwareFileName === content.name)) {
-									this.updates.wifiServer = true;
-								} else if (content.name === "PanelDueFirmware.bin") {
-									this.updates.panelDue = true;
+								if (content.name === "PanelDueFirmware.bin" || content.name === "DuetScreen.bin") {
+									this.updates.display = true;
 								}
 							}
 						} else if (content.name.endsWith(".bin") || content.name.endsWith(".uf2")) {
 							filename = Path.combine(store.state.machine.model.directories.firmware, content.name);
-							if (content.name === "PanelDueFirmware.bin") {
-								this.updates.panelDue = true;
+							if (content.name === "PanelDueFirmware.bin" || content.name === "DuetScreen.bin") {
+								this.updates.display = true;
 							}
 						}
 					}
@@ -410,7 +407,7 @@ export default Vue.extend({
 					value: filename
 				});
 			}
-			const askForUpdate = (this.updates.firmwareBoards.length > 0) || this.updates.wifiServer || this.updates.wifiServerSpiffs || this.updates.panelDue;
+			const askForUpdate = (this.updates.firmwareBoards.length > 0) || this.updates.wifiServer || this.updates.wifiServerSpiffs || this.updates.display;
 
 			// Start uploading
 			if (skipUpload) {
@@ -512,7 +509,7 @@ export default Vue.extend({
 				modules.push(2);
 			}
 			// module 3 means put wifi server into bootloader mode, not supported here
-			if (this.updates.panelDue) {
+			if (this.updates.display) {
 				modules.push(4);
 			}
 
