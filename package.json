@@ -1,6 +1,10 @@
 {
    "name": "duetwebcontrol",
+<<<<<<< HEAD
    "version": "3.5.0-rc.4B820",
+=======
+   "version": "3.5.0",
+>>>>>>> v3.5.0
    "author": "Christian Hammacher <christian@duet3d.com> (https://www.duet3d.com)",
    "homepage": "https://forum.duet3d.com/category/27/duet-web-control",
    "license": "GPL-3.0",

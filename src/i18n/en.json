@@ -298,7 +298,8 @@
       "prompt": "You have uploaded at least one firmware update. Would you like to install them now?",
       "resetTitle": "Reset firmware?",
       "resetPrompt": "You have just installed expansion board updates. Do you want to reboot the main controller to restore the previous configuration?",
-      "sbcWarning": "You are operating your machine in SBC mode. Please upgrade the firmware using DWC only if advised by the firmware developers."
+      "sbcWarning": "You are operating your machine in SBC mode. Please upgrade the firmware using DWC only if advised by the firmware developers.",
+      "updateWiFiFirmware": "Install included WiFi Firmware Update"
     },
     "inputRequired": "Please enter a value",
     "numberRequired": "Please enter a valid number",
@@ -831,7 +832,8 @@
       "probe": "Z-Probe|Z-Probes",
       "noStatus": "No Status",
       "extrusionRate": "Extrusion Rate",
-      "volumetricFlow": "Volumetric Flow"
+      "volumetricFlow": "Volumetric Flow",
+      "virtualEPos": "Virtual Extruder Position"
     },
     "tools": {
       "caption": "Tools",
